@@ -1,15 +1,10 @@
 <resources>
     <string name="app_name">The Daily Grind</string>
 
-    <string name="login_title">Bienvenido</string>
-    <string name="hint_email">Correo Electrónico</string>
-    <string name="hint_pass">Contraseña</string>
-    <string name="btn_entrar">Iniciar Sesión</string>
+    <string name="title_home">Menú</string>
+    <string name="title_dashboard">Flow Zone</string>
+    <string name="title_notifications">Perfil</string>
 
-    <string name="nav_menu">Menú</string>
-    <string name="nav_flow">Flow Zone</string>
-    <string name="nav_profile">Perfil</string>
-
-    <string name="btn_checkin">Escanear QR (Check-In)</string>
-    <string name="btn_checkout">Finalizar Sesión</string>
+    <string name="desc_logo">Logo de la aplicación</string>
+    <string name="desc_cafe">Taza de café</string>
 </resources>

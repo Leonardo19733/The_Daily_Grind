@@ -3,11 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="terracota">#CC5500</color>
-    <color name="verde_esmeralda">#50C878</color>
-    <color name="gris_carbon">#36454F</color>
-    <color name="crema_fondo">#F5F5F5</color>
-    <color name="purple_500">#CC5500</color>
-    <color name="purple_700">#A04000</color>
-    <color name="teal_200">#50C878</color>
+    <color name="terracota">#CC5500</color>      <color name="terracota_oscuro">#A04000</color>
+    <color name="verde_esmeralda">#50C878</color> <color name="gris_carbon">#36454F</color>     <color name="crema_fondo">#F5F5F5</color>
+
+    <color name="purple_200">#FFCC80</color>
+    <color name="purple_500">#CC5500</color> <color name="purple_700">#A04000</color> <color name="teal_200">#50C878</color>   <color name="teal_700">#018786</color>
 </resources>

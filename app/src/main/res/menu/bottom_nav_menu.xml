@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item
+        android:id="@+id/nav_menu"
+        android:icon="@drawable/ic_menu_coffee"
+        android:title="Menú" />
+
+    <item
+        android:id="@+id/nav_flow_zone"
+        android:icon="@drawable/ic_flow_zone"
+        android:title="Flow Zone" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_profile_user"
+        android:title="Perfil" />
+
 </menu>
