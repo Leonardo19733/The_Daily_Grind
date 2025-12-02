@@ -22,35 +22,33 @@ class ProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        // CORRECCIÓN 1: Usamos 'requireContext()' en lugar de 'context'
+        // Esto asegura que el contexto no sea nulo al iniciar SessionManager
         sessionManager = SessionManager(requireContext())
 
-        // Vincular vistas
         val tvNombre = view.findViewById<TextView>(R.id.tvNombreUsuario)
         val tvVasos = view.findViewById<TextView>(R.id.tvVasosSalvados)
         val btnLogout = view.findViewById<Button>(R.id.btnCerrarSesion)
 
-        // Cargar datos reales de la sesión (Requerimiento 1 y 4)
         val nombreUsuario = sessionManager.getUserName()
-        tvNombre.text = nombreUsuario ?: "Usuario Invitado"
+        tvNombre.text = nombreUsuario
 
-        // Simulación de datos gamificados
-        tvVasos.text = "12" // Esto luego vendría de LocalDatabase
+        tvVasos.text = "12"
 
         btnLogout.setOnClickListener {
             sessionManager.logoutUser()
-            // Redirigir al Login
-            val intent = Intent(activity, LoginActivity::class.java)
+
+            // CORRECCIÓN 2: Usamos 'requireActivity()' en lugar de 'activity'
+            // Esto evita el error en la línea 53 al crear el Intent
+            val intent = Intent(requireActivity(), LoginActivity::class.java)
+
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-            activity?.finish()
+
+            // CORRECCIÓN 3: Usamos 'requireActivity()' para cerrar la pantalla
+            requireActivity().finish()
         }
 
         return view
-    }
-
-    // Extensión para SessionManager para obtener el nombre (si no la tenías agregada en SessionManager.kt)
-    fun SessionManager.getUserName(): String? {
-        val prefs = context.getSharedPreferences("TheDailyGrindPrefs", android.content.Context.MODE_PRIVATE)
-        return prefs.getString(SessionManager.KEY_USER_NAME, null)
     }
 }

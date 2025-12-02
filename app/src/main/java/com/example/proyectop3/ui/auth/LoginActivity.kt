@@ -22,19 +22,23 @@ class LoginActivity : AppCompatActivity() {
 
         sessionManager = SessionManager(this)
 
-        // 1. Verificar si ya hay sesión (Auto-Login)
+        // 1. Verificar si ya hay sesión activa
         if (sessionManager.isLoggedIn()) {
             irAMainActivity()
         }
 
+        // 2. Vincular vistas
         val etCorreo = findViewById<EditText>(R.id.etCorreo)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
 
-        // Si decidieras agregar un botón de "Registrarse" en el XML del login:
-        // val tvRegistrar = findViewById<TextView>(R.id.tvIrARegistro)
-        // tvRegistrar.setOnClickListener { startActivity(Intent(this, RegisterActivity::class.java)) }
+        // Link al Registro (Agregado recientemente)
+        val tvRegistro = findViewById<TextView>(R.id.tvIrARegistro)
+        tvRegistro.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
 
+        // 3. Lógica del Botón
         btnLogin.setOnClickListener {
             val correo = etCorreo.text.toString().trim()
             val pass = etPassword.text.toString().trim()
@@ -42,14 +46,17 @@ class LoginActivity : AppCompatActivity() {
             if (correo.isEmpty() || pass.isEmpty()) {
                 Toast.makeText(this, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show()
             } else {
-                val usuario = LocalDatabase.validarCredenciales(correo, pass)
+                val usuarioEncontrado = LocalDatabase.validarCredenciales(correo, pass)
 
-                if (usuario != null) {
-                    sessionManager.createLoginSession(usuario.idUsuario, usuario.nombreCompleto)
-                    Toast.makeText(this, "Bienvenido ${usuario.nombreCompleto}", Toast.LENGTH_SHORT).show()
+                if (usuarioEncontrado != null) {
+                    sessionManager.createLoginSession(
+                        usuarioEncontrado.idUsuario,
+                        usuarioEncontrado.nombreCompleto
+                    )
+                    Toast.makeText(this, "¡Bienvenido ${usuarioEncontrado.nombreCompleto}!", Toast.LENGTH_LONG).show()
                     irAMainActivity()
                 } else {
-                    Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_ERROR).show()
+                    Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_LONG).show()
                 }
             }
         }

@@ -30,7 +30,12 @@ class ProductDetailActivity : AppCompatActivity() {
         val tvNombre = findViewById<TextView>(R.id.tvDetalleNombre)
         val tvPrecio = findViewById<TextView>(R.id.tvDetallePrecio)
         val spinnerLeche = findViewById<Spinner>(R.id.spinnerLeche)
+
+        // CORRECCIÓN AQUÍ:
+        // Buscamos el ID exacto del XML (R.id.spinnerTemperatura)
+        // y lo guardamos en la variable 'spinnerTemp'
         val spinnerTemp = findViewById<Spinner>(R.id.spinnerTemperatura)
+
         val switchVaso = findViewById<Switch>(R.id.switchVaso)
         val btnAgregar = findViewById<Button>(R.id.btnAgregarCarrito)
 
@@ -48,6 +53,8 @@ class ProductDetailActivity : AppCompatActivity() {
         val adapterTemp = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, opcionesTemp)
 
         spinnerLeche.adapter = adapterLeche
+
+        // Usamos la variable 'spinnerTemp' que definimos arriba
         spinnerTemp.adapter = adapterTemp
 
         // 5. Lógica del Switch "Traje mi Vaso" (Descuento)
@@ -64,6 +71,8 @@ class ProductDetailActivity : AppCompatActivity() {
         // 6. Botón Agregar al Pedido
         btnAgregar.setOnClickListener {
             val lecheSeleccionada = spinnerLeche.selectedItem.toString()
+
+            // Usamos la variable correcta 'spinnerTemp'
             val tempSeleccionada = spinnerTemp.selectedItem.toString()
 
             // Aquí guardarías el pedido en la BD o lista global
