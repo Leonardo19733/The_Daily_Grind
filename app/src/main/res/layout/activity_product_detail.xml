@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,12 +15,12 @@
         <ImageView
             android:id="@+id/imgDetalleProducto"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:src="@drawable/ic_menu_coffee"
-            app:tint="#36454F"
+            android:layout_height="280dp"
             android:scaleType="centerCrop"
-            android:background="#F0F0F0"
-            android:padding="60dp"/>
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:src="@drawable/banner_latte"
+            tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,8 +32,8 @@
                 android:id="@+id/tvDetalleNombre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Café"
-                android:textSize="28sp"
+                android:text="Café Latte"
+                android:textSize="32sp"
                 android:textStyle="bold"
                 android:textColor="#36454F"/>
 
@@ -39,8 +41,9 @@
                 android:id="@+id/tvDetallePrecio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$0.00"
-                android:textSize="22sp"
+                android:text="$55.00"
+                android:textSize="24sp"
+                android:textStyle="bold"
                 android:textColor="#CC5500"
                 android:layout_marginBottom="24dp"/>
 
@@ -48,25 +51,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tipo de Leche:"
-                android:layout_marginBottom="4dp"/>
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
 
             <Spinner
                 android:id="@+id/spinnerLeche"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="50dp"
                 android:background="@drawable/bg_edit_text"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="20dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Temperatura:"
-                android:layout_marginBottom="4dp"/>
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
 
             <Spinner
                 android:id="@+id/spinnerTemperatura"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="50dp"
                 android:background="@drawable/bg_edit_text"
                 android:layout_marginBottom="24dp"/>
 
@@ -75,7 +80,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="32dp">
+                android:background="#F0FFF0"
+                android:padding="12dp"
+                android:layout_marginBottom="32dp"
+                android:elevation="2dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_flow_zone"
+                    app:tint="#50C878"
+                    android:layout_marginEnd="12dp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -83,23 +98,27 @@
                     android:layout_weight="1"
                     android:text="Traje mi vaso (Ahorra $5)"
                     android:textStyle="bold"
-                    android:textColor="#50C878"/>
+                    android:textColor="#36454F"
+                    android:textSize="16sp"/>
 
                 <Switch
                     android:id="@+id/switchVaso"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:thumbTint="#50C878"/>
+                    android:thumbTint="#50C878"
+                    android:trackTint="#A5E6BA"/>
             </LinearLayout>
 
             <Button
                 android:id="@+id/btnAgregarCarrito"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:text="Agregar al Pedido"
-                android:background="@drawable/bg_rounded_button"
+                android:layout_height="65dp"
+                android:text="AGREGAR AL PEDIDO"
+                android:textSize="18sp"
+                android:backgroundTint="#CC5500"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                app:cornerRadius="12dp"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

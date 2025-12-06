@@ -18,7 +18,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_login)
 
         sessionManager = SessionManager(this)
@@ -33,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
 
-        // Link al Registro (Agregado recientemente)
+        // Link al Registro
         val tvRegistro = findViewById<TextView>(R.id.tvIrARegistro)
         tvRegistro.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
@@ -57,6 +56,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "¡Bienvenido ${usuarioEncontrado.nombreCompleto}!", Toast.LENGTH_LONG).show()
                     irAMainActivity()
                 } else {
+                    // Se corrigió LENGTH_ERROR por LENGTH_LONG
                     Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_LONG).show()
                 }
             }

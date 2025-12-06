@@ -22,8 +22,7 @@ class ProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        // CORRECCIÓN 1: Usamos 'requireContext()' en lugar de 'context'
-        // Esto asegura que el contexto no sea nulo al iniciar SessionManager
+        // Se usa requireContext() para evitar el error de contexto nulo
         sessionManager = SessionManager(requireContext())
 
         val tvNombre = view.findViewById<TextView>(R.id.tvNombreUsuario)
@@ -38,14 +37,12 @@ class ProfileFragment : Fragment() {
         btnLogout.setOnClickListener {
             sessionManager.logoutUser()
 
-            // CORRECCIÓN 2: Usamos 'requireActivity()' en lugar de 'activity'
-            // Esto evita el error en la línea 53 al crear el Intent
+            // Se usa requireActivity()
             val intent = Intent(requireActivity(), LoginActivity::class.java)
 
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
 
-            // CORRECCIÓN 3: Usamos 'requireActivity()' para cerrar la pantalla
             requireActivity().finish()
         }
 

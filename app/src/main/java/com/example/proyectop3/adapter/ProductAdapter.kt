@@ -36,9 +36,13 @@ class ProductAdapter(
         holder.nombre.text = producto.nombre
         holder.precio.text = "$${producto.precioBase}0"
 
+        holder.img.setImageResource(producto.imagenIcono)
+
         // Configurar el click en el botón "Ver" y en toda la tarjeta
         holder.itemView.setOnClickListener { onProductoClick(producto) }
         holder.btn.setOnClickListener { onProductoClick(producto) }
+
+
     }
 
     override fun getItemCount() = listaProductos.size
