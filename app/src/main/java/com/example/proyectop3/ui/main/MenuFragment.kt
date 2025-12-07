@@ -12,6 +12,7 @@ import com.example.proyectop3.R
 import com.example.proyectop3.adapter.ProductAdapter
 import com.example.proyectop3.storage.LocalDatabase
 import com.example.proyectop3.ui.detail.ProductDetailActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MenuFragment : Fragment() {
 
@@ -22,12 +23,12 @@ class MenuFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_menu, container, false)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerMenu)
+        val fabCarrito = view.findViewById<FloatingActionButton>(R.id.fabCarrito)
+
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // Obtenemos los productos de nuestra base de datos falsa
         val productos = LocalDatabase.obtenerMenu()
 
-        // Configuramos el adaptador con la acción de ir al Detalle
         val adapter = ProductAdapter(productos) { productoSeleccionado ->
             val intent = Intent(context, ProductDetailActivity::class.java)
             intent.putExtra("producto", productoSeleccionado)
@@ -35,6 +36,13 @@ class MenuFragment : Fragment() {
         }
 
         recyclerView.adapter = adapter
+
+        // ACCIÓN DEL BOTÓN FLOTANTE
+        fabCarrito.setOnClickListener {
+            val intent = Intent(context, CartActivity::class.java)
+            startActivity(intent)
+        }
+
         return view
     }
 }

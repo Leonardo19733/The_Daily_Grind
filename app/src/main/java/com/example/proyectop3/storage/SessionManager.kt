@@ -15,7 +15,13 @@ class SessionManager(context: Context) {
 
         const val KEY_FLOW_START_TIME = "flowStartTime"
         const val KEY_FLOW_IS_ACTIVE = "flowIsActive"
+
+        // NUEVA CLAVE: Vasos Salvados
+        const val KEY_SAVED_CUPS = "savedCups"
     }
+
+    // ... (Tus funciones de Login y FlowZone existentes déjalas igual) ...
+    // Solo copia las funciones nuevas de abajo y pégalas al final de la clase
 
     fun createLoginSession(userId: Int, userName: String) {
         editor.putBoolean(KEY_IS_LOGGED_IN, true)
@@ -59,5 +65,18 @@ class SessionManager(context: Context) {
 
     fun getFlowStartTime(): Long {
         return prefs.getLong(KEY_FLOW_START_TIME, 0)
+    }
+
+    // --- NUEVAS FUNCIONES PARA VASOS SALVADOS ---
+
+    fun getSavedCups(): Int {
+        // Devuelve 0 si no hay datos guardados
+        return prefs.getInt(KEY_SAVED_CUPS, 0)
+    }
+
+    fun incrementSavedCups(cantidad: Int) {
+        val actuales = getSavedCups()
+        editor.putInt(KEY_SAVED_CUPS, actuales + cantidad)
+        editor.apply()
     }
 }

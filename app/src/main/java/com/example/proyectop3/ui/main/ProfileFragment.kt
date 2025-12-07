@@ -22,7 +22,6 @@ class ProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        // Se usa requireContext() para evitar el error de contexto nulo
         sessionManager = SessionManager(requireContext())
 
         val tvNombre = view.findViewById<TextView>(R.id.tvNombreUsuario)
@@ -32,20 +31,27 @@ class ProfileFragment : Fragment() {
         val nombreUsuario = sessionManager.getUserName()
         tvNombre.text = nombreUsuario
 
-        tvVasos.text = "12"
+        // CAMBIO: Obtener el dato real de vasos salvados
+        val vasosReales = sessionManager.getSavedCups()
+        tvVasos.text = vasosReales.toString()
 
         btnLogout.setOnClickListener {
             sessionManager.logoutUser()
-
-            // Se usa requireActivity()
             val intent = Intent(requireActivity(), LoginActivity::class.java)
-
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-
             requireActivity().finish()
         }
 
         return view
+    }
+
+    // Agregamos esto para que si regresas de pagar, se actualice el número al instante
+    override fun onResume() {
+        super.onResume()
+        if (::sessionManager.isInitialized) {
+            val tvVasos = view?.findViewById<TextView>(R.id.tvVasosSalvados)
+            tvVasos?.text = sessionManager.getSavedCups().toString()
+        }
     }
 }

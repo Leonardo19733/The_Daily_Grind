@@ -1,6 +1,8 @@
 package com.example.proyectop3.ui.detail
 
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
@@ -11,11 +13,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.proyectop3.R
 import com.example.proyectop3.model.Producto
+import com.example.proyectop3.storage.LocalDatabase
 
 class ProductDetailActivity : AppCompatActivity() {
 
     private lateinit var productoActual: Producto
     private var precioFinal: Double = 0.0
+
+    // Vistas que necesitamos acceder globalmente
+    private lateinit var tvPrecio: TextView
+    private lateinit var spinnerLeche: Spinner
+    private lateinit var switchVaso: Switch
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,18 +33,19 @@ class ProductDetailActivity : AppCompatActivity() {
 
         val imgProducto = findViewById<ImageView>(R.id.imgDetalleProducto)
         val tvNombre = findViewById<TextView>(R.id.tvDetalleNombre)
-        val tvPrecio = findViewById<TextView>(R.id.tvDetallePrecio)
-        val spinnerLeche = findViewById<Spinner>(R.id.spinnerLeche)
-        // Se usa la variable spinnerTemp para referirse al ID spinnerTemperatura
+        tvPrecio = findViewById<TextView>(R.id.tvDetallePrecio) // Inicializamos variable global
+        spinnerLeche = findViewById<Spinner>(R.id.spinnerLeche)
         val spinnerTemp = findViewById<Spinner>(R.id.spinnerTemperatura)
-        val switchVaso = findViewById<Switch>(R.id.switchVaso)
+        switchVaso = findViewById<Switch>(R.id.switchVaso)
         val btnAgregar = findViewById<Button>(R.id.btnAgregarCarrito)
 
+        // Set inicial
         tvNombre.text = productoActual.nombre
-        tvPrecio.text = "$${productoActual.precioBase}"
-        precioFinal = productoActual.precioBase
         imgProducto.setImageResource(productoActual.imagenDetalle)
+        precioFinal = productoActual.precioBase
+        actualizarTextoPrecio()
 
+        // Configurar Spinners
         val opcionesLeche = arrayOf("Leche Entera", "Deslactosada", "Almendra (+ $10)", "Avena (+ $10)")
         val opcionesTemp = arrayOf("Muy Caliente", "Caliente", "Tibio", "Frío")
 
@@ -44,31 +53,66 @@ class ProductDetailActivity : AppCompatActivity() {
         val adapterTemp = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, opcionesTemp)
 
         spinnerLeche.adapter = adapterLeche
-        // Se usa la variable correcta
         spinnerTemp.adapter = adapterTemp
 
-        switchVaso.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                precioFinal = productoActual.precioBase - 5.0
-                Toast.makeText(this, "¡Descuento ecológico aplicado!", Toast.LENGTH_SHORT).show()
-            } else {
-                precioFinal = productoActual.precioBase
+        // --- LÓGICA DE CAMBIO DE PRECIO EN TIEMPO REAL ---
+
+        // 1. Escuchar cambios en la Leche
+        spinnerLeche.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                calcularNuevoPrecio()
             }
-            tvPrecio.text = "$$precioFinal"
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        // 2. Escuchar cambios en el Switch de Vaso
+        switchVaso.setOnCheckedChangeListener { _, _ ->
+            calcularNuevoPrecio()
+        }
+
+        // --- BOTÓN AGREGAR ---
         btnAgregar.setOnClickListener {
             val lecheSeleccionada = spinnerLeche.selectedItem.toString()
-            // Se usa la variable correcta
             val tempSeleccionada = spinnerTemp.selectedItem.toString()
+            val traeVaso = switchVaso.isChecked
 
-            Toast.makeText(
-                this,
-                "Agregado: ${productoActual.nombre} ($lecheSeleccionada, $tempSeleccionada)",
-                Toast.LENGTH_LONG
-            ).show()
+            // Construimos una descripción detallada
+            // Agregamos una marca clave "[Vaso Propio]" para detectarlo después en el carrito
+            val marcaVaso = if (traeVaso) " | Vaso Propio" else ""
+            val descripcionFinal = "$lecheSeleccionada, $tempSeleccionada$marcaVaso"
 
+            val productoParaCarrito = productoActual.copy(
+                precioBase = precioFinal,
+                descripcion = descripcionFinal
+            )
+
+            LocalDatabase.agregarAlCarrito(productoParaCarrito)
+            Toast.makeText(this, "Agregado: $${precioFinal}", Toast.LENGTH_SHORT).show()
             finish()
         }
+    }
+
+    private fun calcularNuevoPrecio() {
+        var costoExtra = 0.0
+        var descuento = 0.0
+
+        // Regla: Leche Almendra (pos 2) y Avena (pos 3) cuestan $10 extra
+        val posicionLeche = spinnerLeche.selectedItemPosition
+        if (posicionLeche == 2 || posicionLeche == 3) {
+            costoExtra = 10.0
+        }
+
+        // Regla: Si trae vaso, descuenta $5
+        if (switchVaso.isChecked) {
+            descuento = 5.0
+        }
+
+        // Cálculo final
+        precioFinal = productoActual.precioBase + costoExtra - descuento
+        actualizarTextoPrecio()
+    }
+
+    private fun actualizarTextoPrecio() {
+        tvPrecio.text = "$${String.format("%.2f", precioFinal)}"
     }
 }

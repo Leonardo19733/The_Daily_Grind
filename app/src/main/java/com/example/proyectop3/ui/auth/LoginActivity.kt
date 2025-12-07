@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate // Importante para el modo oscuro
 import com.example.proyectop3.R
 import com.example.proyectop3.storage.LocalDatabase
 import com.example.proyectop3.storage.SessionManager
@@ -18,27 +19,27 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 🛑 LÍNEA MÁGICA: Fuerza a la app a usar colores claros (letras oscuras)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
         setContentView(R.layout.activity_login)
 
         sessionManager = SessionManager(this)
 
-        // 1. Verificar si ya hay sesión activa
         if (sessionManager.isLoggedIn()) {
             irAMainActivity()
         }
 
-        // 2. Vincular vistas
         val etCorreo = findViewById<EditText>(R.id.etCorreo)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
-
-        // Link al Registro
         val tvRegistro = findViewById<TextView>(R.id.tvIrARegistro)
+
         tvRegistro.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        // 3. Lógica del Botón
         btnLogin.setOnClickListener {
             val correo = etCorreo.text.toString().trim()
             val pass = etPassword.text.toString().trim()
@@ -56,7 +57,6 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "¡Bienvenido ${usuarioEncontrado.nombreCompleto}!", Toast.LENGTH_LONG).show()
                     irAMainActivity()
                 } else {
-                    // Se corrigió LENGTH_ERROR por LENGTH_LONG
                     Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_LONG).show()
                 }
             }
