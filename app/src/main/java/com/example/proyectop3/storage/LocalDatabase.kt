@@ -28,6 +28,19 @@ object LocalDatabase {
     // 3. CARRITO DE COMPRAS (NUEVO)
     private val carrito: MutableList<Producto> = mutableListOf()
 
+    // ... (Dentro del object LocalDatabase, debajo de la lista carrito)
+
+    // 4. HISTORIAL DE PEDIDOS
+    private val historialOrdenes: MutableList<com.example.proyectop3.model.Orden> = mutableListOf()
+
+    fun registrarOrdenHistorial(orden: com.example.proyectop3.model.Orden) {
+        historialOrdenes.add(0, orden) // Agregamos al principio para que salga la más reciente primero
+    }
+
+    fun obtenerHistorialPorUsuario(userId: Int): List<com.example.proyectop3.model.Orden> {
+        return historialOrdenes.filter { it.userId == userId }
+    }
+
     fun validarCredenciales(correo: String, pass: String): Usuario? {
         return usuarios.find { it.correoElectronico == correo && it.contrasena == pass }
     }

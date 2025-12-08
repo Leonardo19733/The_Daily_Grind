@@ -35,6 +35,13 @@ class MenuFragment : Fragment() {
             startActivity(intent)
         }
 
+        val cardBanner = view.findViewById<androidx.cardview.widget.CardView>(R.id.cardBanner)
+
+        cardBanner.setOnClickListener {
+            val intent = Intent(context, ShopInfoActivity::class.java)
+            startActivity(intent)
+        }
+
         recyclerView.adapter = adapter
 
         // ACCIÓN DEL BOTÓN FLOTANTE

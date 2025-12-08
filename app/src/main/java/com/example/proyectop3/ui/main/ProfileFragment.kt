@@ -35,6 +35,13 @@ class ProfileFragment : Fragment() {
         val vasosReales = sessionManager.getSavedCups()
         tvVasos.text = vasosReales.toString()
 
+        val btnHistorial = view.findViewById<Button>(R.id.btnVerHistorial)
+
+        btnHistorial.setOnClickListener {
+            val intent = Intent(requireContext(), HistoryActivity::class.java)
+            startActivity(intent)
+        }
+
         btnLogout.setOnClickListener {
             sessionManager.logoutUser()
             val intent = Intent(requireActivity(), LoginActivity::class.java)
@@ -45,6 +52,7 @@ class ProfileFragment : Fragment() {
 
         return view
     }
+
 
     // Agregamos esto para que si regresas de pagar, se actualice el número al instante
     override fun onResume() {

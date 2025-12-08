@@ -15,14 +15,9 @@ class SessionManager(context: Context) {
 
         const val KEY_FLOW_START_TIME = "flowStartTime"
         const val KEY_FLOW_IS_ACTIVE = "flowIsActive"
-
-        // NUEVA CLAVE: Vasos Salvados
-        const val KEY_SAVED_CUPS = "savedCups"
     }
 
-    // ... (Tus funciones de Login y FlowZone existentes déjalas igual) ...
-    // Solo copia las funciones nuevas de abajo y pégalas al final de la clase
-
+    // --- LOGIN ---
     fun createLoginSession(userId: Int, userName: String) {
         editor.putBoolean(KEY_IS_LOGGED_IN, true)
         editor.putInt(KEY_USER_ID, userId)
@@ -35,7 +30,14 @@ class SessionManager(context: Context) {
     }
 
     fun logoutUser() {
-        editor.clear()
+        // CORRECCIÓN: No usamos clear(). Solo removemos los datos de sesión activa.
+        // Así los datos históricos (como vasos) se quedan guardados en el teléfono.
+        editor.remove(KEY_IS_LOGGED_IN)
+        editor.remove(KEY_USER_ID)
+        editor.remove(KEY_USER_NAME)
+        // También reseteamos el Flow Zone por seguridad
+        editor.remove(KEY_FLOW_IS_ACTIVE)
+        editor.remove(KEY_FLOW_START_TIME)
         editor.apply()
     }
 
@@ -47,6 +49,7 @@ class SessionManager(context: Context) {
         return prefs.getInt(KEY_USER_ID, -1)
     }
 
+    // --- FLOW ZONE ---
     fun startFlowSession() {
         editor.putBoolean(KEY_FLOW_IS_ACTIVE, true)
         editor.putLong(KEY_FLOW_START_TIME, System.currentTimeMillis())
@@ -67,16 +70,24 @@ class SessionManager(context: Context) {
         return prefs.getLong(KEY_FLOW_START_TIME, 0)
     }
 
-    // --- NUEVAS FUNCIONES PARA VASOS SALVADOS ---
+    // --- VASOS SALVADOS (POR USUARIO) ---
+
+    // Generamos una clave única para cada usuario: "saved_cups_1", "saved_cups_99", etc.
+    private fun getCupsKey(): String {
+        val userId = getUserId()
+        return "saved_cups_$userId"
+    }
 
     fun getSavedCups(): Int {
-        // Devuelve 0 si no hay datos guardados
-        return prefs.getInt(KEY_SAVED_CUPS, 0)
+        if (!isLoggedIn()) return 0
+        return prefs.getInt(getCupsKey(), 0)
     }
 
     fun incrementSavedCups(cantidad: Int) {
-        val actuales = getSavedCups()
-        editor.putInt(KEY_SAVED_CUPS, actuales + cantidad)
+        if (!isLoggedIn()) return
+        val key = getCupsKey()
+        val actuales = prefs.getInt(key, 0)
+        editor.putInt(key, actuales + cantidad)
         editor.apply()
     }
 }
